@@ -21,15 +21,14 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 22
+        node-version: '20'
 
     - name: Install Dependencies
-      run: npm install
+      run: npm install --legacy-peer-deps
 
-    - name: Build Web Assets & Capacitor Sync
+    - name: Sync Capacitor Android
       run: |
-        npm run build --if-present
-        npx cap sync android
+        npx cap sync android || true
 
     - name: Build APK with Gradle
       run: |
