@@ -24,15 +24,20 @@ jobs:
         node-version: '22'
 
     - name: Install Node Dependencies
-      run: npm install
+      run: npm install --legacy-peer-deps
 
-    - name: Sync Capacitor
-      run: npx cap sync android
+    - name: Build Web Assets & Sync
+      run: |
+        npm run build --if-present
+        npx cap sync android
 
-    - name: Build APK with Gradle Wrapper
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+
+    - name: Build APK
       run: |
         cd android
-        chmod +x gradlew
+        chmod +x gradlew || true
         ./gradlew assembleDebug --stacktrace
 
     - name: Upload APK
