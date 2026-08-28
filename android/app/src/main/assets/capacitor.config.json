@@ -1,0 +1,9 @@
+{
+	"appId": "com.bluenex.app",
+	"appName": "Bluenex",
+	"webDir": "www",
+	"server": {
+		"url": "https://blunexstore.com",
+		"cleartext": true
+	}
+}
