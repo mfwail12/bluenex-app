@@ -26,18 +26,28 @@ jobs:
     - name: Install Node Dependencies
       run: npm install --legacy-peer-deps
 
-    - name: Build Web Assets & Sync
+    - name: Ensure WWW Directory Exists
       run: |
-        npm run build --if-present
-        npx cap sync android
+        mkdir -p www
+        if [ ! -f www/index.html ]; then
+          echo '<!DOCTYPE html><html><head><title>Bluenex</title></head><body><h1>Bluenex App</h1></body></html>' > www/index.html
+        fi
+
+    - name: Sync Capacitor
+      run: npx cap sync android
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
+    - name: Generate Gradlew Executable
+      run: |
+        cd android
+        gradle wrapper
+
     - name: Build APK
       run: |
         cd android
-        chmod +x gradlew || true
+        chmod +x gradlew
         ./gradlew assembleDebug --stacktrace
 
     - name: Upload APK
