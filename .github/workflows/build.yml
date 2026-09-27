@@ -24,9 +24,9 @@ jobs:
         node-version: '22'
 
     - name: Install Node Dependencies
-      run: npm install --legacy-peer-deps --force
+      run: npm install --legacy-peer-deps
 
-    - name: Ensure WWW Directory Exists
+    - name: Ensure WWW Directory
       run: |
         mkdir -p www
         if [ ! -f www/index.html ]; then
@@ -34,13 +34,15 @@ jobs:
         fi
 
     - name: Sync Capacitor
-      run: npx cap sync android || true
+      run: npx cap sync android
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
 
     - name: Build APK with Gradle
       run: |
         cd android
-        chmod +x gradlew || true
-        ./gradlew assembleDebug --stacktrace
+        gradle assembleDebug --stacktrace
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
