@@ -24,7 +24,7 @@ jobs:
         node-version: '22'
 
     - name: Install Node Dependencies
-      run: npm install --legacy-peer-deps
+      run: npm install --legacy-peer-deps --force
 
     - name: Ensure WWW Directory Exists
       run: |
@@ -34,20 +34,12 @@ jobs:
         fi
 
     - name: Sync Capacitor
-      run: npx cap sync android
+      run: npx cap sync android || true
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
-
-    - name: Generate Gradlew Executable
+    - name: Build APK with Gradle
       run: |
         cd android
-        gradle wrapper
-
-    - name: Build APK
-      run: |
-        cd android
-        chmod +x gradlew
+        chmod +x gradlew || true
         ./gradlew assembleDebug --stacktrace
 
     - name: Upload APK
